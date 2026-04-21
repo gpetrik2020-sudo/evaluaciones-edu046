@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evaluación sumativa — EDU046</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@400;500&display=swap');
+:root {
+  --negro:#0f0f0f; --blanco:#ffffff; --acento:#f0a500;
+  --azul:#1a4a7a; --azul-cl:#e8f0f9;
+  --verde:#1a6b3a; --verde-cl:#e8f5ee;
+  --gris-1:#1a1a1a; --gris-2:#2a2a2a; --gris-txt:#888880;
+  --radio:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',sans-serif;background:var(--negro);color:var(--blanco);min-height:100vh;}
+header{background:var(--negro);border-bottom:1px solid #222;padding:1.1rem 2rem;display:flex;align-items:center;gap:.75rem;}
+.tag{background:var(--acento);color:var(--negro);font-family:'Syne',sans-serif;font-weight:800;font-size:12px;padding:4px 12px;border-radius:20px;letter-spacing:.05em;}
+header h1{font-family:'Syne',sans-serif;font-size:16px;font-weight:600;}
+.app{max-width:900px;margin:2rem auto;padding:0 1rem;}
+.titulo-sec{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--gris-txt);margin-bottom:1.25rem;}
+
+/* Barra de distribución */
+.barra-wrap{background:var(--gris-1);border:1px solid #222;border-radius:var(--radio);padding:1.25rem;margin-bottom:2rem;}
+.barra-titulo{font-family:'Syne',sans-serif;font-size:13px;font-weight:600;color:var(--blanco);margin-bottom:1rem;}
+.barra{display:flex;height:36px;border-radius:6px;overflow:hidden;gap:2px;}
+.seg{display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;transition:opacity .2s;}
+.seg:hover{opacity:.85;}
+.seg-p1{background:#e05a2b;flex:20;}
+.seg-p2{background:#2d6bb5;flex:15;}
+.seg-p3{background:#1a6b3a;flex:15;}
+.seg-fin{background:var(--acento);color:var(--negro);flex:50;}
+.leyenda{display:flex;gap:1.5rem;margin-top:.75rem;flex-wrap:wrap;}
+.ley-item{display:flex;align-items:center;gap:.5rem;font-size:12px;color:var(--gris-txt);}
+.ley-dot{width:10px;height:10px;border-radius:2px;}
+
+/* Cards de exámenes */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:2rem;}
+.card{background:var(--gris-1);border:1px solid #222;border-radius:14px;padding:1.5rem;display:flex;flex-direction:column;gap:.75rem;transition:border-color .2s,transform .15s;}
+.card:hover{border-color:var(--acento);transform:translateY(-2px);}
+.card-peso{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;line-height:1;}
+.card-peso span{font-size:16px;font-weight:400;color:var(--gris-txt);}
+.card-titulo{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;}
+.card-unidades{font-size:12px;color:var(--gris-txt);line-height:1.5;}
+.card-btn{margin-top:auto;display:inline-block;background:var(--acento);color:var(--negro);font-family:'Syne',sans-serif;font-size:13px;font-weight:700;padding:10px 18px;border-radius:var(--radio);text-decoration:none;text-align:center;transition:background .15s;}
+.card-btn:hover{background:#f5b530;}
+.card-p1{border-top:3px solid #e05a2b;} .card-p1 .card-peso{color:#e05a2b;}
+.card-p2{border-top:3px solid #2d6bb5;} .card-p2 .card-peso{color:#2d6bb5;}
+.card-p3{border-top:3px solid #1a6b3a;} .card-p3 .card-peso{color:#1a6b3a;}
+.card-fin{border-top:3px solid var(--acento);} .card-fin .card-peso{color:var(--acento);}
+
+/* Cuadro resultado final */
+.resultado-wrap{background:var(--gris-1);border:1px solid #333;border-radius:14px;padding:1.5rem;}
+.resultado-titulo{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin-bottom:1rem;}
+.resultado-tabla{width:100%;border-collapse:collapse;}
+.resultado-tabla th{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--gris-txt);padding:8px 12px;text-align:left;border-bottom:1px solid #333;}
+.resultado-tabla td{padding:10px 12px;font-size:13px;border-bottom:1px solid #222;}
+.resultado-tabla tr:last-child td{border-bottom:none;}
+.score-cell{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;text-align:center;}
+.score-empty{color:#333;font-size:13px;text-align:center;}
+.total-row td{background:#111;font-family:'Syne',sans-serif;font-weight:700;}
+.total-score{font-size:22px;color:var(--acento);}
+.nota{font-size:11px;color:var(--gris-txt);margin-top:.75rem;line-height:1.5;}
+</style>
+</head>
+<body>
+<header>
+  <span class="tag">EDU046</span>
+  <h1>Evaluación sumativa — Investigación de Mercados</h1>
+</header>
+<div class="app">
+
+  <div class="barra-wrap">
+    <div class="barra-titulo">Distribución de la calificación final</div>
+    <div class="barra">
+      <div class="seg seg-p1">20%</div>
+      <div class="seg seg-p2">15%</div>
+      <div class="seg seg-p3">15%</div>
+      <div class="seg seg-fin">50%</div>
+    </div>
+    <div class="leyenda">
+      <div class="ley-item"><div class="ley-dot" style="background:#e05a2b"></div>Parcial 1 (20%)</div>
+      <div class="ley-item"><div class="ley-dot" style="background:#2d6bb5"></div>Parcial 2 (15%)</div>
+      <div class="ley-item"><div class="ley-dot" style="background:#1a6b3a"></div>Parcial 3 (15%)</div>
+      <div class="ley-item"><div class="ley-dot" style="background:var(--acento)"></div>Final (50%)</div>
+    </div>
+  </div>
+
+  <p class="titulo-sec">Selecciona un examen</p>
+  <div class="grid">
+    <div class="card card-p1">
+      <div class="card-peso">20<span>%</span></div>
+      <div class="card-titulo">Examen Parcial 1</div>
+      <div class="card-unidades">Unidades 1 y 2 — El mercado y el problema de investigación</div>
+      <a href="/examen/parcial1" class="card-btn">Iniciar examen</a>
+    </div>
+    <div class="card card-p2">
+      <div class="card-peso">15<span>%</span></div>
+      <div class="card-titulo">Examen Parcial 2</div>
+      <div class="card-unidades">Unidades 3 y 4 — Variables, instrumentos y métodos</div>
+      <a href="/examen/parcial2" class="card-btn">Iniciar examen</a>
+    </div>
+    <div class="card card-p3">
+      <div class="card-peso">15<span>%</span></div>
+      <div class="card-titulo">Examen Parcial 3</div>
+      <div class="card-unidades">Unidades 5 y 6 — Análisis, decisión y ética</div>
+      <a href="/examen/parcial3" class="card-btn">Iniciar examen</a>
+    </div>
+    <div class="card card-fin">
+      <div class="card-peso">50<span>%</span></div>
+      <div class="card-titulo">Examen Final</div>
+      <div class="card-unidades">Unidades 1–6 — Curso completo EDU046</div>
+      <a href="/examen/final" class="card-btn">Iniciar examen</a>
+    </div>
+  </div>
+
+  <div class="resultado-wrap">
+    <div class="resultado-titulo">Cuadro de resultado final</div>
+    <table class="resultado-tabla">
+      <thead>
+        <tr>
+          <th>Examen</th>
+          <th>Unidades</th>
+          <th style="text-align:center">Peso</th>
+          <th style="text-align:center">Calificación (0–10)</th>
+          <th style="text-align:center">Aportación</th>
+        </tr>
+      </thead>
+      <tbody id="tabla-resultados">
+        <tr>
+          <td>Parcial 1</td>
+          <td style="color:var(--gris-txt);font-size:12px;">Unidades 1 y 2</td>
+          <td style="text-align:center;color:#e05a2b;font-weight:600;">20%</td>
+          <td class="score-empty">—</td>
+          <td class="score-empty">—</td>
+        </tr>
+        <tr>
+          <td>Parcial 2</td>
+          <td style="color:var(--gris-txt);font-size:12px;">Unidades 3 y 4</td>
+          <td style="text-align:center;color:#2d6bb5;font-weight:600;">15%</td>
+          <td class="score-empty">—</td>
+          <td class="score-empty">—</td>
+        </tr>
+        <tr>
+          <td>Parcial 3</td>
+          <td style="color:var(--gris-txt);font-size:12px;">Unidades 5 y 6</td>
+          <td style="text-align:center;color:#1a6b3a;font-weight:600;">15%</td>
+          <td class="score-empty">—</td>
+          <td class="score-empty">—</td>
+        </tr>
+        <tr>
+          <td>Final</td>
+          <td style="color:var(--gris-txt);font-size:12px;">Unidades 1–6</td>
+          <td style="text-align:center;color:var(--acento);font-weight:600;">50%</td>
+          <td class="score-empty">—</td>
+          <td class="score-empty">—</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr class="total-row">
+          <td colspan="2">Calificación final</td>
+          <td style="text-align:center;color:var(--gris-txt);">100%</td>
+          <td colspan="2" class="score-cell total-score" id="total-final">—</td>
+        </tr>
+      </tfoot>
+    </table>
+    <p class="nota">Los resultados se actualizan automáticamente al completar cada examen en esta misma sesión del navegador.</p>
+  </div>
+
+</div>
+<script>
+// Cargar resultados guardados en sessionStorage
+const KEYS = ['parcial1','parcial2','parcial3','final'];
+const PESOS = {parcial1:20, parcial2:15, parcial3:15, final:50};
+const COLORES = {parcial1:'#e05a2b', parcial2:'#2d6bb5', parcial3:'#1a6b3a', final:'var(--acento)'};
+
+function actualizar() {
+  const filas = document.querySelectorAll('#tabla-resultados tr');
+  let total = 0; let completo = true;
+
+  KEYS.forEach((k, i) => {
+    const data = sessionStorage.getItem('examen_' + k);
+    const celdaScore = filas[i].querySelectorAll('td')[3];
+    const celdaAport = filas[i].querySelectorAll('td')[4];
+    if (data) {
+      const r = JSON.parse(data);
+      const prom = r.resumen.promedio;
+      const aport = r.resumen.calificacion_ponderada;
+      celdaScore.textContent = prom.toFixed(1);
+      celdaScore.className = 'score-cell';
+      celdaScore.style.color = COLORES[k];
+      celdaAport.textContent = aport.toFixed(2) + ' pts';
+      celdaAport.className = 'score-cell';
+      celdaAport.style.color = COLORES[k];
+      total += aport;
+    } else {
+      completo = false;
+    }
+  });
+
+  const cel = document.getElementById('total-final');
+  if (completo) {
+    cel.textContent = total.toFixed(2) + ' / 10';
+    cel.style.color = total >= 6 ? '#1a6b3a' : '#c0392b';
+  } else {
+    cel.textContent = '—';
+  }
+}
+actualizar();
+</script>
+</body>
+</html>
